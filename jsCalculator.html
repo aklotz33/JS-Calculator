@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>JS Calculator</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="jsCalculatorCSS.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<script>
+    $(function () {
+        var displayString = "";
+        var sequenceArr = []; //store each component of the current calculator sequence
+        var currentNumberString = ""; //string type accumulator to grab digits
+        var previousButton = "";
+
+        $("#btn-7").click(function () {
+            var val = "7";
+            console.log(val);
+            displayString += val;
+            $("#output").val(displayString);
+            $("#current-button").val(val);
+            //add to current number string since this is a number
+            currentNumberString += val;
+            // update previous button
+            previousButton = val;
+        });
+
+        $("#btn-ac").click(function () {
+            $("#output").val("");
+            displayString = "";
+            $("#current-button").val("0");
+            sequenceArr = [];
+            previousButton = "";
+            currentNumberString = "";
+        });
+
+        $("#btn-plus").click(function(){
+            var val = "+";
+            displayString += val;
+            $("#output").val(displayString);
+            $("#current-button").val(val);
+            //break the currentNumber here
+            var currentNumber = Number(currentNumberString);
+            //reset current number string
+            currentNumberString = "";
+            // update previous button
+            previousButton = val;
+            // add em to the sequence array
+            sequenceArr.push(currentNumber);
+            sequenceArr.push(val);  //may not want to do this here and instead conditionally push previousButton if it's non numeric if a number is pressed
+
+        });
+
+        $("#btn-equals").click(function(){
+            var val = "=";
+            previousButton = val;
+            //push the current number into the sequence arr
+            sequenceArr.push(Number(currentNumberString))
+            currentNumberString = "";
+            console.log(sequenceArr);
+            var total = sequenceArr[0];
+            cur_idx = 1;
+            while(cur_idx <= sequenceArr.length-2) {
+                var cur_op = sequenceArr[cur_idx];
+                var cur_num = sequenceArr[cur_idx+1];
+                console.log(cur_op + ' ' + cur_num)
+                switch(cur_op) {
+                    case "+":
+                        total += cur_num;
+                        break;
+                    case "-":
+                        total -= cur_num;
+                        break;
+                    case "/":
+                        total /= cur_num;
+                        break;
+                    case "*":
+                        total *= cur_num;
+                        break;
+                }     
+                cur_idx += 2;
+
+            }
+
+            //update display string with total
+            displayString += val + total;
+            //set current button to the total
+            $("#current-button").val(total);
+            //add = and total to output string
+            $("#output").val(displayString);
+
+            //reset sequence array to just be total
+            sequenceArr = [total];
+            displayString = total;
+        });
+
+    });
+</script>
+
+<body>
+    <div class="row main-body">
+        <div class="col-sm-3">.col-sm-3</div>
+        <div class="col-sm-6">.col-sm-6
+            <div class="panel panel-default">
+                <div class="panel-heading">Calc Panel</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <input type="text" value="0" id="current-button">
+                    </div>
+                    <div class="row">
+                        <input type="text" value="" id="output">
+                    </div>
+                    <div class="row btn-row">
+                        <button type="button" class="btn btn-primary btn-xs" id="btn-ac">AC</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-ce">CE</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-div">/</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-mul">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="row btn-row">
+                        <button type="button" class="btn btn-primary btn-xs" id="btn-7">7</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-8">8</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-9">9</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-minus">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                    <div class="row btn-row">
+                        <button type="button" class="btn btn-primary btn-xs">4</button>
+                        <button type="button" class="btn btn-primary btn-xs">5</button>
+                        <button type="button" class="btn btn-primary btn-xs">6</button>
+                        <button type="button" class="btn btn-primary btn-xs" id="btn-plus">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="row btn-row">
+                        <button type="button" class="btn btn-primary btn-xs">1</button>
+                        <button type="button" class="btn btn-primary btn-xs">2</button>
+                        <button type="button" class="btn btn-primary btn-xs">3</button>
+                        <button type="button" class="btn btn-primary btn-xs" id="btn-equals">=</button>
+                    </div>
+                    <div class="row btn-row">
+                        <button type="button" class="btn btn-primary btn-xs">0</button>
+                        <button type="button" class="btn btn-primary btn-xs">.</button>
+                        <button type="button" class="btn btn-primary btn-xs">=</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">.col-sm-3</div>
+    </div>
+
+
+</body>
+
+</html>

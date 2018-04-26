@@ -1,0 +1,20 @@
+.main-body {
+  background-color: black;
+}
+
+.panel {
+  background-color: green;
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+.btn-row {
+  margin: 10px 10px 10px 10px;
+}
+#output, #current-button {
+  background-color: white;
+  text-align: right;
+}
+
+.btn {
+  margin: 10px 10px 10px 10px;
+}
